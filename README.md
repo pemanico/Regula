@@ -5,7 +5,7 @@ Migração da aplicação de KPIs regulatórios de Oracle APEX para React e Node
 Fase 1: duas páginas de KPI, leitura de Oracle.
 Fase 2: comentários (inserts append-only na Oracle).
 
-Ver [docs/arquitetura.md](docs/arquitetura.md).
+Ver [docs/arquitetura.md](docs/arquitetura.md) e [docs/infraestrutura.md](docs/infraestrutura.md).
 
 ## Estrutura
 
