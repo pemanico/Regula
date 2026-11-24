@@ -31,6 +31,21 @@ Parâmetros a definir por instância:
 
 Porquê duas instâncias em prod: uma só é um ponto único de falha. Três instâncias só se o teste de carga mostrar que duas não cumprem o p95 alvo.
 
+## Ligação à Oracle: modo thick com NNE
+
+A base de dados exige Native Network Encryption (TLS foi testado e não é aceite). O node-oracledb em modo thin não suporta NNE, por isso a API usa modo thick.
+
+Requisitos por ambiente (dev e prod):
+
+- **Oracle Instant Client** (versão 19c ou superior, a confirmar com a versão do driver), instalado numa pasta fixa, definida em `ORACLE_CLIENT_LIB_DIR`. Confirmar as condições de redistribuição antes de o incluir numa imagem de container.
+- **`sqlnet.ora` do cliente**, numa pasta definida em `TNS_ADMIN`, com `SQLNET.ENCRYPTION_CLIENT` e `SQLNET.CRYPTO_CHECKSUM_CLIENT` iguais aos do servidor. Os algoritmos são definidos pelo DBA.
+- **Pacote npm:** `oracledb@26.0.0`, fixado sem `^`. Instalar com `npm install` em `backend/`.
+- **Variáveis de ambiente:** ver `backend/.env.example`. Credenciais nunca em código nem em commits.
+
+Limitação: o modo thick é global ao processo. A API inteira usa thick, sem exceções.
+
+Impacto na medição: os testes de carga e o PoC têm de correr já em thick, porque é esse o modo de produção.
+
 ## Alternativa sem servidor de API: Oracle ORDS
 
 Se o ORDS estiver disponível no ambiente Oracle da BNP, expõe as views diretamente em REST e elimina a API Node. Nesse cenário, a infraestrutura reduz-se a:
